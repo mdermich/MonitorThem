@@ -1,0 +1,7 @@
+[OPTIONS]
+disable=
+    invalid-name,
+    inconsistent-return-statements,
+    bad-whitespace,
+    too-many-locals,
+    missing-docstring

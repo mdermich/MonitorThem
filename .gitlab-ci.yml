@@ -1,0 +1,58 @@
+image: group8tse/pipeline_image:latest
+stages:
+  - compile
+  - test
+  - delivery
+compile-job:
+  stage: compile
+  script:
+    - python3 -m compileall .
+test-lint:
+  stage: test
+  needs: ["test-custom"]
+  script:
+    - files=$(git diff-tree --no-commit-id --name-only -r $CI_COMMIT_SHA)
+    - echo $files
+    - python3 test/linter.py $files || echo $?
+test-custom:
+  stage: test
+  needs: ["compile-job"]
+  script:
+   - python3 -m unittest -v test/TestStringMethods.py
+test-coverage:
+  stage: test
+  needs: ["test-custom"]
+  script:
+    - coverage run --branch -m unittest -v test/TestStringMethods.py
+    - coverage report -m
+  coverage: '/TOTAL.*\s+(\d+\%)/'    
+delivery-job:
+  stage: delivery
+  needs: ["test-lint", "test-coverage"]
+  image: docker:19.03.12
+
+  variables:
+    CI_REGISTRY: docker.io
+    CI_REGISTRY_IMAGE: index.docker.io/$CI_REGISTRY_USER/project_image:latest
+    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: ""
+
+  services:
+    - name: docker:dind
+      entrypoint: ["env", "-u", "DOCKER_HOST"]
+      command: ["dockerd-entrypoint.sh"]
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+
+  script:
+    - echo "Deployment- $CI_COMMIT_BRANCH branch."
+    - docker build --cache-from "$CI_REGISTRY_IMAGE" -t "$CI_REGISTRY_IMAGE" .
+    - docker push "$CI_REGISTRY_IMAGE"
+  only:
+    - master
+
+    
+
+    
+    
