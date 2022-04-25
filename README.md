@@ -1,5 +1,6 @@
 # Monitor Them
-![monitor] /
+![monitor]  
+
 A Server Monitoring tool :
 * Connecting to all the machines "to be monitored", which are specified in the json file scripts/monitors.json, through SSH.
 * Get CPU & RAM info from these distant machines.
