@@ -1,10 +1,10 @@
 # Monitor Them
 A Server Monitoring tool :
-* Connecting to all the machines "to be monitored" through SSH.
+* Connecting to all the machines "to be monitored", which are specified in a json file monitors.json, through SSH.
 * Get CPU & RAM info from these distant machines.
 * Extract info from LOGs on the machines.
 * Continuous delivery of the project in a Docker image.
-This was a project developed in a DevOps context, which means all the following points were respected : 
+This was a project developed in a ***DevOps*** context, which means all the following points were respected : 
 * Writing tests and running them on each push.
 * Continuous integration.
 * Using a linter.
