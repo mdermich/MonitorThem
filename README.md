@@ -1,6 +1,6 @@
 # Monitor Them
 A Server Monitoring tool :
-* Connecting to all the machines "to be monitored", which are specified in a json file monitors.json, through SSH.
+* Connecting to all the machines "to be monitored", which are specified in the json file scripts/monitors.json, through SSH.
 * Get CPU & RAM info from these distant machines.
 * Extract info from LOGs on the machines.
 * Continuous delivery of the project in a Docker image.
